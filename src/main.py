@@ -5,15 +5,19 @@ import openpyxl as pyxl;
 from openpyxl.utils.dataframe import dataframe_to_rows
 from pathlib import Path
 
-df = pd.DataFrame(columns=["MACHINE","NC PROGRAM PATH", "MATERIAL ID", "BLANK", "WEIGHT", "MACHINING TIME", "LASER TOTAL CUTTING LENGTH", "NUMBER OF PROGRAMME RUNS", "SCRAP"])
-setupPlanList = ["9500.html", "81011.html", "319930.html", "500585.html", "3712951.html", "test.html"]
+df = pd.DataFrame(columns=["MACHINE","NC PROGRAM PATH", "MATERIAL ID", "BLANK", "WEIGHT", "MACHINING TIME", "LASER TOTAL CUTTING LENGTH", "SCRAP"])
+setupPlanList = ["9500.html", "81011.html", "319930.html", "500585.html", "3712951.html", "nonexistent.html"]
 setupPlanDirectory = Path("testing/html")
 excelFileDirectory = Path("testing/xlsx")
 
 
 def readFiles(setupPlanDirectory, setupPlanList):
     for file in setupPlanList:
-        with open(setupPlanDirectory / file) as fp:
+        setupPlanPath = Path(setupPlanDirectory / file)
+        if not setupPlanPath.is_file():
+            print("Napaka datoteka", file, "ne obstaja")
+            return
+        with open(setupPlanPath) as fp:
             setupPlan = BeautifulSoup(fp, "html.parser")
         dataframeAppendFile(setupPlan)
 
