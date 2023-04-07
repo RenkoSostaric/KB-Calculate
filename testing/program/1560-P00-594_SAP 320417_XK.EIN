@@ -1,0 +1,93 @@
+****************************************************************************
+*                                                                          *
+*                   OPERATORS SETUP SHEET                            V1.3  *
+*                                                                          *
+****************************************************************************
+* MACHINE:    L20       CONTROL:      Sin 840D  MAX. LASER POWER 5000 WATT  *
+----------------------------------------------------------------------------
+* COMPANY:         Trumpf            PROGRAMMER:  User                     *
+----------------------------------------------------------------------------
+* JOB NAME:        Unnamed           NUMBER OF PROGRAM RUNS:           1   *
+----------------------------------------------------------------------------
+* PROGRAM NUMBER:  TEST_1                                                  *
+* DATE:            07.04.2023                                              *
+----------------------------------------------------------------------------
+* MATERIAL:        St37-30           BLANK: 2906.15 X 818.07 X 3.00 MM     *
+* WEIGHT:         55.99   KG         GRAIN:     X                          *
+* SHEETSTOP:       1                                                       *
+----------------------------------------------------------------------------
+* NOZZLE DIAMETER        0.8   MM    FOCAL LENGTH LENS:    9.800  INCH     *
+* LASER TABLE:        ST030MD0-O2S0-30-2:TC23-FW-5000-0-99999-4-1.0038                                 *
+----------------------------------------------------------------------------
+* TECHNOLOGY TABLES:                                                       *
+*    NUMBER         PIERCING MODE     CUTTING MODE      TYPE OF CONTOUR    *
+----------------------------------------------------------------------------
+* ST030MD0-O2S0-30-2      NORMAL            NORMAL            LARGE              *
+----------------------------------------------------------------------------
+* MEMORY REQUIREMENT        29996      CHARACTERS                          *
+* TOTAL TIME:               11.97      MINUTES                             *
+* TOTAL CUTTING LENGTH      43787      MM                                  *
+----------------------------------------------------------------------------
+* PART No.  DRAWING NUMBER                 DRAWING NAME             NUMBER *
+----------------------------------------------------------------------------
+*       1 | NOID_1                       | 2016-R13-35_317486_X.. |     21 *
+*       2 | NOID_2                       | 2015-R07-242_r.01_12.. |      2 *
+*       4 | NOID_4                       | 1560-P00-594_SAP 320.. |    132 *
+*       3 | NOID_3                       | 2015-R07-204_r.02_10.. |      3 *
+****************************************************************************
+*                                                                          *
+* SHEET NAME:         /TRUM...T_progra_izvoz/1560-P00-594_SAP 320417_XK.taf*
+*                                                                          *
+****************************************************************************
+*              S I N G L E   P A R T   I N F O R M A T I O N               *
+*                                                                          *
+*--------------------------------------------------------------------------*
+* PART NUMBER:              1                                              *
+* GEOMETRY FILE NAME:       /TRUM...T_progra_izvoz/2016-R13-35_317486_XK.GEO*
+* DRAWING NUMBER:           NOID_1                                         *
+* DRAWING NAME:                                                            *
+* RULE NAME:                ST030MD0-O2S0-30-2:TC23-FW-0-99999-0-99999-4-1.0038:5P*
+* SUBROUTINE NUMBER:        SP1TEST_1                   REMAINING OPERATION*
+* MACHINING TIME:           0.13   MINUTES                                 *
+* CUTTING LENGTH:           399.31      MM                                 *
+* WEIGHT:                   0.08        KG                                 *
+* NUMBER OF PIERCING POINTS 6                                              *
+*--------------------------------------------------------------------------*
+* PART NUMBER:              2                                              *
+* GEOMETRY FILE NAME:       /TRUM..._progra_izvoz/2015-R07-242_r.01_120k.GEO*
+* DRAWING NUMBER:           NOID_2                                         *
+* DRAWING NAME:                                                            *
+* RULE NAME:                ST030MD0-O2S0-30-2:TC23-FW-0-99999-0-99999-4-1.0038:5P*
+* SUBROUTINE NUMBER:        SP2TEST_1                   REMAINING OPERATION*
+* MACHINING TIME:           1.00   MINUTES                                 *
+* CUTTING LENGTH:           4337.27     MM                                 *
+* WEIGHT:                   3.38        KG                                 *
+* NUMBER OF PIERCING POINTS 11                                             *
+*--------------------------------------------------------------------------*
+*--------------------------------------------------------------------------*
+* PART NUMBER:              4                                              *
+* GEOMETRY FILE NAME:       /TRUM...gra_izvoz/1560-P00-594_SAP 320417_XK.GEO*
+* DRAWING NUMBER:           NOID_4                                         *
+* DRAWING NAME:                                                            *
+* RULE NAME:                ST030MD0-O2S0-30-2:TC23-FW-0-99999-0-99999-4-1.0038:5P*
+* SUBROUTINE NUMBER:        SP3TEST_1                   REMAINING OPERATION*
+* MACHINING TIME:           0.03   MINUTES                                 *
+* CUTTING LENGTH:           134.39      MM                                 *
+* WEIGHT:                   0.03        KG                                 *
+* NUMBER OF PIERCING POINTS 1                                              *
+*--------------------------------------------------------------------------*
+* PART NUMBER:              3                                              *
+* GEOMETRY FILE NAME:       /TRUM..._progra_izvoz/2015-R07-204_r.02_105k.GEO*
+* DRAWING NUMBER:           NOID_3                                         *
+* DRAWING NAME:                                                            *
+* RULE NAME:                ST030MD0-O2S0-30-2:TC23-FW-0-99999-0-99999-4-1.0038:5P*
+* SUBROUTINE NUMBER:        SP4TEST_1                   REMAINING OPERATION*
+* MACHINING TIME:           0.70   MINUTES                                 *
+* CUTTING LENGTH:           2995.72     MM                                 *
+* WEIGHT:                   2.39        KG                                 *
+* NUMBER OF PIERCING POINTS 9                                              *
+****************************************************************************
+
+
+
+NO ERRORS AND WARNINGS!                 

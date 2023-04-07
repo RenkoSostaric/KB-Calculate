@@ -1,0 +1,244 @@
+﻿<?xml version='1.0' encoding='utf-8'?>
+<class file-format-version='1' oid='10000' type='NestingJob'><stringtable>
+<string id='nestingtime'>Nesting time</string>
+<string id='size'>Size</string>
+<string id='close'>Close</string>
+<string id='print'>Print</string>
+<string id='showPartsWithInsufficientQuantitiyOnly'>Hide parts with correct number of pieces</string>
+<string id='hidePartsPerSheet'>Hide parts per sheet</string>
+<string id='showPartsPerSheet'>Show parts per sheet</string>
+<string id='sheetUsage'>Sheet layout</string>
+<string id='quantity'>Number</string>
+<string id='usedSheets'>Sheets used</string>
+<string id='alsoShowPartsWithSufficientQuantity'>Show also parts with correct number of pieces</string>
+<string id='commonCut_short'>TwinLine</string>
+<string id='priority_short'>Priority</string>
+<string id='angle_short'>Angle</string>
+<string id='mirrored_short'>Mirrored</string>
+<string id='partCount_short'>Number</string>
+<string id='partName_short'>Part name</string>
+<string id='noWarnings'>No warnings</string>
+<string id='warnings'>Warnings:</string>
+<string id='numberOfSheets'>Number of sheets</string>
+<string id='filename'>File name</string>
+<string id='grainDirection'>Grain</string>
+<string id='area'>Area</string>
+<string id='customerOrder'>Customer order</string>
+<string id='date'>Date</string>
+<string id='remainderSheets'>Residual sheets:</string>
+<string id='max'>Max</string>
+<string id='min'>Min</string>
+<string id='cur'>Eff</string>
+<string id='nr'>No.</string>
+<string id='parts'>Parts</string>
+<string id='overallResult'>Total result:</string>
+<string id='nameOfDrawing'>Name of drawing</string>
+<string id='rotateable'>Rotat.</string>
+<string id='count'>Number</string>
+<string id='fileName'>File name</string>
+<string id='waste'>Scrap</string>
+<string id='sheets'>Sheet(s)</string>
+<string id='sheetNumber'>Sheet number:</string>
+<string id='partDoesNotBelongToJob'>Part is no job part</string>
+<string id='defaultSheet'>Standard sheet</string>
+<string id='sheetSize'>Sheet size</string>
+<string id='sheetThickness'>Sheet thickness</string>
+<string id='machine'>Machine</string>
+<string id='storeItemDesignation'>Stock ID</string>
+<string id='material'>Material</string>
+<string id='twinline'>TwinLine</string>
+<string id='geoPath'>GEO path</string>
+<string id='sheetPath'>Sheet path</string>
+<string id='sheetName'>Sheet description</string>
+<string id='jobName'>Order name</string>
+<string id='nestResult'>Results log - Nest</string>
+</stringtable>
+ <geoinfos>
+ </geoinfos>
+
+ <UnicodeString name='OriginalFileName' value='/TRUMPF.NET/Workfiles/User1/PETER/TEST_progra_izvoz/S235_3mm.JOB'/>
+ <refcol name='NestingVariantList'>
+  <class oid='10001' type='NestingVariant'>
+   <ref name='NestingResult'>
+    <class oid='10002' type='NestingResult'>
+     <long name='OverallNumberOfSheets' value='0'/>
+     <double name='OverallWaste' value='100'/>
+     <double name='NestingTime' value='0'/>
+     <bool name='HasProblems' value='false'/>
+     <enum name='State' type='JobState' value='Initial'/>
+    </class>
+   </ref>
+   <refcol name='RawSheetList'>
+    <class oid='10003' type='RawSheet'>
+     <UnicodeString name='TRGFilename' value=''/>
+     <UnicodeString name='StorageItemDesignation' value=''/>
+     <UnicodeString name='StorageLocation' value=''/>
+     <bool name='FlagRemainderSheetManagement' value='false'/>
+     <bool name='Active' value='true'/>
+     <enum name='SheetLoadStrategy' type='SheetLoadStrategy' value='Center'/>
+     <enum name='StartingCorner' type='StartingCorner' value='LowerLeft'/>
+     <enum name='GrainDirection' type='GrainDirection' value='X'/>
+     <enum name='NestingDirectionLastSheet' type='Direction' value='Horizontal'/>
+     <enum name='NestingDirection' type='Direction' value='Vertical'/>
+     <double name='MarginBottom' value='10'/>
+     <double name='MarginTop' value='10'/>
+     <double name='MarginRight' value='10'/>
+     <double name='MarginLeft' value='10'/>
+     <double name='DimensionZ' value='3'/>
+     <double name='DimensionY' value='1000'/>
+     <double name='DimensionX' value='2000'/>
+     <long name='Number' value='100'/>
+     <UnicodeString name='Material' value='St37-30'/>
+     <long name='ID' value='17'/>
+    </class>
+    <class oid='10004' type='RawSheet'>
+     <UnicodeString name='TRGFilename' value=''/>
+     <UnicodeString name='StorageItemDesignation' value=''/>
+     <UnicodeString name='StorageLocation' value=''/>
+     <bool name='FlagRemainderSheetManagement' value='false'/>
+     <bool name='Active' value='true'/>
+     <enum name='SheetLoadStrategy' type='SheetLoadStrategy' value='Center'/>
+     <enum name='StartingCorner' type='StartingCorner' value='LowerLeft'/>
+     <enum name='GrainDirection' type='GrainDirection' value='X'/>
+     <enum name='NestingDirectionLastSheet' type='Direction' value='Horizontal'/>
+     <enum name='NestingDirection' type='Direction' value='Vertical'/>
+     <double name='MarginBottom' value='10'/>
+     <double name='MarginTop' value='10'/>
+     <double name='MarginRight' value='10'/>
+     <double name='MarginLeft' value='10'/>
+     <double name='DimensionZ' value='3'/>
+     <double name='DimensionY' value='153.93'/>
+     <double name='DimensionX' value='3000'/>
+     <long name='Number' value='100'/>
+     <UnicodeString name='Material' value='St37-30'/>
+     <long name='ID' value='26'/>
+    </class>
+    <class oid='10005' type='RawSheet'>
+     <UnicodeString name='TRGFilename' value=''/>
+     <UnicodeString name='StorageItemDesignation' value=''/>
+     <UnicodeString name='StorageLocation' value=''/>
+     <bool name='FlagRemainderSheetManagement' value='false'/>
+     <bool name='Active' value='true'/>
+     <enum name='SheetLoadStrategy' type='SheetLoadStrategy' value='Center'/>
+     <enum name='StartingCorner' type='StartingCorner' value='LowerLeft'/>
+     <enum name='GrainDirection' type='GrainDirection' value='X'/>
+     <enum name='NestingDirectionLastSheet' type='Direction' value='Horizontal'/>
+     <enum name='NestingDirection' type='Direction' value='Vertical'/>
+     <double name='MarginBottom' value='10'/>
+     <double name='MarginTop' value='10'/>
+     <double name='MarginRight' value='10'/>
+     <double name='MarginLeft' value='10'/>
+     <double name='DimensionZ' value='3'/>
+     <double name='DimensionY' value='1030.5'/>
+     <double name='DimensionX' value='2982.7'/>
+     <long name='Number' value='100'/>
+     <UnicodeString name='Material' value='St37-30'/>
+     <long name='ID' value='28'/>
+    </class>
+    <class oid='10006' type='RawSheet'>
+     <UnicodeString name='TRGFilename' value=''/>
+     <UnicodeString name='StorageItemDesignation' value=''/>
+     <UnicodeString name='StorageLocation' value=''/>
+     <bool name='FlagRemainderSheetManagement' value='false'/>
+     <bool name='Active' value='true'/>
+     <enum name='SheetLoadStrategy' type='SheetLoadStrategy' value='Center'/>
+     <enum name='StartingCorner' type='StartingCorner' value='LowerLeft'/>
+     <enum name='GrainDirection' type='GrainDirection' value='X'/>
+     <enum name='NestingDirectionLastSheet' type='Direction' value='Horizontal'/>
+     <enum name='NestingDirection' type='Direction' value='Vertical'/>
+     <double name='MarginBottom' value='10'/>
+     <double name='MarginTop' value='10'/>
+     <double name='MarginRight' value='10'/>
+     <double name='MarginLeft' value='10'/>
+     <double name='DimensionZ' value='3'/>
+     <double name='DimensionY' value='225'/>
+     <double name='DimensionX' value='150'/>
+     <long name='Number' value='1'/>
+     <UnicodeString name='Material' value='St37-30'/>
+     <long name='ID' value='70'/>
+    </class>
+    <class oid='10007' type='RawSheet'>
+     <UnicodeString name='TRGFilename' value=''/>
+     <UnicodeString name='StorageItemDesignation' value=''/>
+     <UnicodeString name='StorageLocation' value=''/>
+     <bool name='FlagRemainderSheetManagement' value='false'/>
+     <bool name='Active' value='true'/>
+     <enum name='SheetLoadStrategy' type='SheetLoadStrategy' value='Center'/>
+     <enum name='StartingCorner' type='StartingCorner' value='LowerLeft'/>
+     <enum name='GrainDirection' type='GrainDirection' value='X'/>
+     <enum name='NestingDirectionLastSheet' type='Direction' value='Horizontal'/>
+     <enum name='NestingDirection' type='Direction' value='Vertical'/>
+     <double name='MarginBottom' value='10'/>
+     <double name='MarginTop' value='10'/>
+     <double name='MarginRight' value='10'/>
+     <double name='MarginLeft' value='10'/>
+     <double name='DimensionZ' value='3'/>
+     <double name='DimensionY' value='225'/>
+     <double name='DimensionX' value='2000'/>
+     <long name='Number' value='1'/>
+     <UnicodeString name='Material' value='St37-30'/>
+     <long name='ID' value='72'/>
+    </class>
+   </refcol>
+   <ref name='NestingParameter'>
+    <class oid='10008' type='NestingParameter'>
+     <ref name='TilesParameter'>
+      <class oid='10009' type='TilesParameter'>
+       <enum name='DeterminationTileSize' type='DeterminationTileSize' value='PerJob'/>
+       <bool name='EnablePositioningDirectionMeander' value='false'/>
+       <double name='TileGridY' value='0'/>
+       <double name='TileGridX' value='0'/>
+       <bool name='EnableTileGrid' value='false'/>
+      </class>
+     </ref>
+     <ref name='EnRectParameter'>
+      <class oid='10010' type='EnRectParameter'>
+       <enum name='FillExternalSurfaces' type='FillExternalSurfaces' value='DoNotUse'/>
+       <enum name='DetermineStartPartBy' type='DetermineStartPartBy' value='Surface'/>
+      </class>
+     </ref>
+     <ref name='FrGeoParameter'>
+      <class oid='10011' type='FrGeoParameter'>
+       <enum name='NestFillersUptoNestedHeight' type='FillersUptoNestedHeight' value='No'/>
+       <enum name='SheetNestingMode' type='SheetNestingMode' value='SheetOrder'/>
+       <bool name='EnableBestNestingDirection' value='false'/>
+       <bool name='PreventTiltingOfParts' value='false'/>
+       <bool name='EnableDeathAreaSparing' value='false'/>
+       <bool name='EnableClampSparing' value='true'/>
+       <double name='OptimizerTimeLimit' value='0'/>
+       <bool name='EnableOptimizer' value='false'/>
+       <UnicodeString name='NestingProfileName' value='Default'/>
+       <double name='IdenticalSheetsMinUtilization' value='65'/>
+       <bool name='GenerateIdenticalSheets' value='false'/>
+       <double name='NestingResolution' value='2'/>
+      </class>
+     </ref>
+     <double name='CommonCutMinEdgeLength' value='0'/>
+     <double name='CommonCutDistanceY' value='0'/>
+     <double name='CommonCutDistanceX' value='0'/>
+     <bool name='EnableCommonCut' value='false'/>
+     <bool name='FillInternalSurfaces' value='true'/>
+     <bool name='FillUpLastSheet' value='true'/>
+     <bool name='EnableGrainDirection' value='true'/>
+     <double name='WebsY' value='10'/>
+     <double name='WebsX' value='10'/>
+    </class>
+   </ref>
+   <bool name='Winner' value='false'/>
+   <enum name='NestingProcessor' type='NestingProcessor' value='None'/>
+   <long name='ID' value='1'/>
+  </class>
+ </refcol>
+ <UnicodeString name='MaterialDesignation' value='St37-30'/>
+ <ref name='MachineKey'>
+  <class oid='10012' type='MachineKey'>
+   <long name='ControlVersion' value='0'/>
+   <UnicodeString name='ControlName' value=''/>
+   <long name='MachineType' value='0'/>
+   <UnicodeString name='MachineTruName' value=''/>
+   <UnicodeString name='MachineName' value=''/>
+  </class>
+ </ref>
+ <UnicodeString name='SheetPath' value='/TRUMPF.NET/Workfiles/User1/PETER/TEST_progra_izvoz'/>
+ <UnicodeString name='BaseSheetName' value='S235_3mm'/>
+</class>

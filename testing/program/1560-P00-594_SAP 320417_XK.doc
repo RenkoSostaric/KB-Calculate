@@ -1,0 +1,77 @@
+------------------------------------------------------------------------
+ |                                                                       |
+ | T e c h n o l o g y - P r o t o c o l                          V1.2   |
+ |                                                                       |
+------------------------------------------------------------------------
+File name
+=========
+
+        ...r1/PETER/TEST_progra_izvoz/1560-P00-594_SAP 320417_XK.TAF
+
+Processing Strategy
+=====================
+
+        FRAMING
+
+Arrangement: SHEET
+=================
+
+  nested          :  158     produced     :  158     blocked      :    0
+  ----------------------------------------------------------------------
+
+
+  Part name                                     | Number 
+  ---------------------------------------------------------------------
+  #~1                                           |        
+  ...EST_progra_izvoz/2016-R13-35_317486_XK.GEO |       1
+  ...ST_progra_izvoz/2015-R07-242_r.01_120k.GEO |       2
+  ...rogra_izvoz/1560-P00-594_SAP 320417_XK.GEO |       4
+  ...ST_progra_izvoz/2015-R07-204_r.02_105k.GEO |       3
+  #~1END
+
+
+Arrangement: PARTS
+=================
+
+  Parts   || Parts        |                  || Parts        | Inhibit   
+  Number  || produced     | Rules            || blocked      | identific.
+  -----------------------------------------------------------------------
+  #~2     ||              |                  ||              |           
+        1 ||           21 |               5P ||            0 |          -
+        2 ||            2 |               5P ||            0 |          -
+        4 ||          132 |               5P ||            0 |          -
+        3 ||            3 |               5P ||            0 |          -
+  #~2END
+
+
+Arrangement: PARTS: CONTOURS
+===========================
+
+  Parts   || Contours        || Contours        | Inhibit   
+  Number  || produced        || blocked         | identific.
+  ----------------------------------------------------------
+          ||                 ||                 |           
+        1 ||               6 ||               0 |          -
+        2 ||              11 ||               0 |          -
+        4 ||               1 ||               0 |          -
+        3 ||               9 ||               0 |          -
+
+
+Arrangement: PARTS: MACHINING OF CONTOURS
+=======================================
+
+  Parts   || Measuring        Piercing       Fillet           Marking
+  Number  ||      |  Evaporating  |    Approach   |    Looping    |
+          ||      |       |       |       |       |       |       |
+  -----------------------------------------------------------------
+          ||
+        1 ||      0       0       6       6       1       0       0
+        2 ||      0       0      11      11      13       0       0
+        4 ||      0       0       1       1       3       0       0
+        3 ||      0       0       9       9       4       0       0
+
+
+Collisions
+===========
+
+  -----
