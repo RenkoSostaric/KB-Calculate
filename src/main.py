@@ -9,6 +9,9 @@ df = pd.DataFrame(columns=["MACHINE","NC PROGRAM PATH", "MATERIAL ID", "BLANK", 
 setupPlanList = ["9500.html", "81011.html", "319930.html", "500585.html", "3712951.html", "test.html"]
 setupPlanDirectory = Path("testing/html")
 excelFileDirectory = Path("testing/xlsx")
+excelSourceName = "main.xlsx"
+excelOutputName = "main_output.xlsx"
+excelWorkbookName = "podatki"
 
 
 def readFiles(setupPlanDirectory, setupPlanList):
@@ -35,11 +38,11 @@ def dataframeAppendFile(setupPlan):
     df = pd.concat([df, dfTemp], ignore_index=True)
 
 def writeToXlsx(excelFileDirectory):
-    workbook = pyxl.load_workbook(excelFileDirectory / "main.xlsx")
-    worksheet = workbook["podatki"];
+    workbook = pyxl.load_workbook(excelFileDirectory / excelSourceName)
+    worksheet = workbook[excelWorkbookName];
     for row in dataframe_to_rows(df, header = True, index = False):
         worksheet.append(row)
-    workbook.save(excelFileDirectory / "main_output.xlsx")
+    workbook.save(excelFileDirectory / excelOutputName)
     workbook.close()
 
 readFiles(setupPlanDirectory, setupPlanList)
