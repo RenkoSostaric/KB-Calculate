@@ -1,17 +1,20 @@
 import tkinter as tk
 import tkinter.font as font
 from tkinterdnd2 import DND_FILES, TkinterDnD
+from  tkinter import ttk
 from pathlib import Path
 from PIL import Image, ImageTk
 from PIL import Image, ImageTk, ImageFilter
 import ctypes
 import math
+import conversion
 
 GWL_EXSTYLE = -20
 WS_EX_APPWINDOW = 0x00040000
 WS_EX_TOOLWINDOW = 0x00000080
 OUTPUT_PATH = Path(__file__).parent
 ASSETS_PATH = OUTPUT_PATH / Path("../assets")
+fileDataframe = None
 ctypes.windll.shcore.SetProcessDpiAwareness(1)
 
 def relative_to_assets(path: str) -> Path:
@@ -156,12 +159,14 @@ def fileWindow():
     
     dropped_files = []
     def handle_drop(event):
-        file_paths = event.data.split('\n')
+        file_paths = event.data.replace('{', '').replace('}', '\n').split('\n')
         file_paths = [path.strip() for path in file_paths if path.strip()]
         for file_path in file_paths:
             dropped_files.append(file_path)
         if len(dropped_files) > 0:
             waitWindow()
+            fileDataframe = conversion.mainConversion(dropped_files)
+            window.after(1000, lambda: resultsWindow(fileDataframe))
     
     leftCanvas.drop_target_register(DND_FILES) # type: ignore
     leftCanvas.dnd_bind('<<Drop>>', handle_drop) # type: ignore
@@ -196,7 +201,7 @@ def waitWindow():
         )
         leftCanvas.itemconfig(throbberItem, image=throbberImage)
         leftCanvas.throbberImage = throbberImage  # type: ignore
-        window.after(20, rotate_image, angle - 10)
+        window.after(10, rotate_image, angle - 10)
     rotate_image()
     leftCanvas.create_text(
         130.0,
@@ -209,7 +214,7 @@ def waitWindow():
     )
     window.update()
     
-def resultsWindow():
+def resultsWindow(fileDataframe):
     leftCanvas.delete("throbberImage", "throbberBackgroundImage", "throbberText")
     rightCanvas.delete("backgroundLogo")
     checkmarkImage = tk.PhotoImage(
@@ -231,6 +236,70 @@ def resultsWindow():
         fill="#333333",
         font=("Montserrat Medium", 16 * -1)
     )
+    buttonCancelImage = Image.open(relative_to_assets("button_cancel.png"))
+    buttonCancelImage = buttonCancelImage.resize((93, 40), resample=Image.BICUBIC)
+    buttonCancelImage = ImageTk.PhotoImage(buttonCancelImage)
+    rightCanvas.button_cancel_image = buttonCancelImage # type: ignore
+    button_cancel = tk.Button(
+        image=buttonCancelImage,
+        borderwidth=0,
+        highlightthickness=0,
+        background="#FFFFFF",
+        command=lambda: print("button_cancel clicked"),
+        relief="flat"
+    )
+    button_cancel.place(    
+        x=570.0,
+        y=480.0,
+        width=93.0,
+        height=40.0
+    )
+    
+    
+    
+    buttonXlsxImage = Image.open(relative_to_assets("button_xlsx.png"))
+    buttonXlsxImage = buttonXlsxImage.resize((120, 40), resample=Image.BICUBIC)
+    buttonXlsxImage = ImageTk.PhotoImage(buttonXlsxImage)
+    rightCanvas.button_xlsx_image = buttonXlsxImage # type: ignore
+    button_xlsx = tk.Button(
+        image=buttonXlsxImage,
+        borderwidth=0,
+        highlightthickness=0,
+        background="#FFFFFF",
+        command=lambda: print("button_xlsx clicked"),
+        relief="flat"
+    )
+    button_xlsx.place(    
+        x=670.0,
+        y=480.0,
+        width=120.0,
+        height=40.0
+    )
+    
+    fileDataframe[fileDataframe.columns[0]] = fileDataframe[fileDataframe.columns[0]].apply(lambda x: x[:26] + '...' if len(x) > 26 else x)
+    style = ttk.Style()
+    style.configure("style.Treeview", borderwidth=0, highlightthickness=0, font=('Montserrat', 10))
+    style.configure("style.Treeview.Heading", font=('Montserrat Semibold', 9))
+    style.layout("style.Treeview", [('style.Treeview.treearea', {'sticky': 'nswe'})])
+    tree = ttk.Treeview(
+        rightCanvas, 
+        columns=(fileDataframe.columns[0], fileDataframe.columns[2], fileDataframe.columns[3],fileDataframe.columns[-1]), #type: ignore
+        show="headings",
+        style="style.Treeview",
+        height=18
+    )
+    tree.place(x=0, y=0)
+        
+    tree.column(fileDataframe.columns[0], width=220, stretch=False) #type: ignore
+    tree.column(fileDataframe.columns[2], width=100, stretch=False) #type: ignore
+    tree.column(fileDataframe.columns[3], width=100, stretch=False) #type: ignore
+    tree.column(fileDataframe.columns[-1], width=120, stretch=False) #type: ignore
+
+    for col in tree["columns"]:
+        tree.heading(col, text=col)    
+    for index, row in fileDataframe.iterrows():
+        tree.insert("", "end", values=(row[fileDataframe.columns[0]], row[fileDataframe.columns[2]], row[fileDataframe.columns[3]], row[fileDataframe.columns[-1]])) #type: ignore
+
     window.update()
 
 if __name__ == "__main__":
