@@ -98,7 +98,7 @@ button_2.place(
 )
 window.resizable(False, False)
 
-df = pd.read_excel('C:\\Users\\Uporabnik\\Documents\\KB Calculate\\testing\\xlsx\\main_output.xlsx') 
+df = pd.read_excel('C:\\Users\\Uporabnik\\Documents\\KB Calculate\\testing\\xlsx\\main_output.xlsx', index_col=0) 
 print(df)
 
 # create a treeview with data from dataframe
@@ -123,10 +123,8 @@ for col in df.columns:
 for index, row in df.iterrows():
     tree.insert("", "end", values=list(row))
     for i, value in enumerate(row):
-        col_width = tkFont.Font().measure(df.columns[i])
-        if tree.column(df.columns[i], width=None) < col_width:
-            tree.column(df.columns[i], width=col_width)
-
-window.mainloop()
+        col_width = tkFont.Font().measure(df.columns[i]) #type: ignore
+        if tree.column(df.columns[i], width=None) < col_width: #type: ignore
+            tree.column(df.columns[i], width=col_width) #type: ignore
 
 window.mainloop()
