@@ -10,7 +10,7 @@ from pathlib import Path
 import warnings
 warnings.filterwarnings("ignore", category=UserWarning)
 
-setupPlanCollumns = ["Count", "Processed", "ProgramNumber", "ProgramRuns", "PartNumber", "DrawingNumber", "DrawingName", "Customer", "NumberOfParts", "DimensionX", "DimensionY", "Area", "Weight", "GeoFilename", "BmpFilename", "JobName", "MaterialId", "SheetSizeZ"]
+setupPlanCollumns = ["GeoFilename", "NumberOfParts", "DimensionX", "DimensionY", "Area", "Weight", "MachiningTime"]
 setupPlanList = ["1560-P00-594_SAP 320417_XK.HTML"]
 setupPlanDirectory = Path("testing/program")
 excelFileDirectory = Path("testing/xlsx")
@@ -28,8 +28,10 @@ def readFiles(setupPlanDirectory, setupPlanList):
                 return
             with open(setupPlanPath) as fp:
                 setupPlan = BeautifulSoup(fp, "html.parser")
-            singlePartData = getSinglePartTable(setupPlan)
+            singlePartData = getSinglePartSQL(setupPlan)
             singlePartData = singlePartData.replace("CREATE TABLE LabelPartData;\nALTER TABLE LabelPartData ADD COLUMN Count COUNTER PRIMARY KEY;", "CREATE TABLE LabelPartData (Count INTEGER PRIMARY KEY AUTOINCREMENT);")
+            singlePartData += getSinglePartMachiningTime(setupPlan)
+            print(singlePartData)
             if(singlePartData == ""):
                 print("Error: File", file, "is not valid")
                 return
@@ -38,20 +40,30 @@ def readFiles(setupPlanDirectory, setupPlanList):
             print("Error:", e)
             return
 
+def getSinglePartMachiningTime(setupPlan):
+    singlePartSQL = "ALTER TABLE LabelPartData ADD COLUMN MachiningTime VARCHAR(255);\n"
+    singlePartTable = setupPlan.find(string=re.compile("INFORMATION ON SINGLE PART")).find_parent("table")
+    machiningTimesRows = singlePartTable.find_all("font", string=re.compile("MACHINING TIME:"))
+    for i in range(len(machiningTimesRows)):
+        machiningTime = machiningTimesRows[i].find_parent("tr").find_all("td")[1].text
+        if(machiningTime != ""):
+            singlePartSQL += "UPDATE LabelPartData SET MachiningTime='" + re.findall(r"\d+\.\d+ min", machiningTime)[0] + "' WHERE COUNT = " + str(i+1) + ";"
+    return singlePartSQL
+    
 
-def getSinglePartTable(singlePartData):
+def getSinglePartSQL(setupPlan):
     try:
-        comments = singlePartData.findAll(string=lambda string:isinstance(string, Comment))
+        comments = setupPlan.findAll(string=lambda string:isinstance(string, Comment))
         for comment in comments:        
             commentSoup = BeautifulSoup(comment, "lxml")    
             sqlRow = commentSoup.find("sql", string="CREATE TABLE LabelPartData")
             if sqlRow is not None:
-                singlePartData = sqlRow.text + ";\n"
+                setupPlan = sqlRow.text + ";\n"
                 while sqlRow.next_sibling is not None:
                     sqlRow = sqlRow.next_sibling
                     if hasattr(sqlRow, 'name') and sqlRow.name == "sql": # type: ignore
-                        singlePartData += sqlRow.text + ";\n"
-                return singlePartData
+                        setupPlan += sqlRow.text + ";\n"
+                return setupPlan
         return ""
     except Exception as e:
         print("Error:", e)
@@ -67,10 +79,12 @@ def dataframeAppendFile(setupPlan):
         database.commit()
         sql_query = pd.read_sql_query ('''
             SELECT
-            *
+            '''+ ", ".join(setupPlanCollumns) + '''
             FROM LabelPartData
         ''', database)
         df = pd.DataFrame(sql_query)
+        df["GeoFilename"] = df["GeoFilename"].replace(to_replace=r".*/(.+\.GEO)", value=r"\g<1>", regex=True)
+
     except Exception as e:
         print("Error:", e)
         exit(1)
