@@ -11,14 +11,27 @@ import time
 import threading
 import configparser
 import os
+import pyglet
+pyglet.options["win32_gdi_font"] = True
 
 GWL_EXSTYLE = -20
 WS_EX_APPWINDOW = 0x00040000
 WS_EX_TOOLWINDOW = 0x00000080
 OUTPUT_PATH = Path(__file__).parent
 ASSETS_PATH = OUTPUT_PATH / Path("../assets")
+RESOURCES_PATH = OUTPUT_PATH / Path("../resources")
 fileDataframe = None
 ctypes.windll.shcore.SetProcessDpiAwareness(1)
+
+pyglet.font.add_file(os.path.normpath(RESOURCES_PATH / Path("FontAwesome-Regular.otf")))
+pyglet.font.add_file(os.path.normpath(RESOURCES_PATH / Path("Montserrat-Medium.ttf")))
+pyglet.font.add_file(os.path.normpath(RESOURCES_PATH / Path("Montserrat-Semibold.ttf")))
+fontAwesomeFont = pyglet.font.load("Font Awesome 6 Regular Free")
+montserratMediumFont = pyglet.font.load('Montserrat Medium')
+montserratSemiboldFont = pyglet.font.load("Montserrat SemiBold")
+print(pyglet.font.have_font("Montserrat Medium"))
+print(pyglet.font.have_font("Montserrat SemiBold"))
+print(pyglet.font.have_font("Font Awesome 6 Regular Free"))
 
 # Load the values of the variables from the configuration file
 config = configparser.ConfigParser()
@@ -108,7 +121,7 @@ def mainWindow():
     exitButton = tk.Button(
         navBar,
         text = "\uf00d",
-        font = font.Font(family="FontAwesome", size=14),
+        font = fontAwesomeFont,
         bg = "#EAEAEA",
         fg = "#333333",
         bd = 0,
@@ -126,7 +139,7 @@ def mainWindow():
     menuButton = tk.Button(
         navBar,
         text = "\uf0c9",
-        font = font.Font(family="FontAwesome", size=12),
+        font = fontAwesomeFont,
         bg = "#EAEAEA",
         fg = "#333333",
         bd = 0,
@@ -142,7 +155,7 @@ def mainWindow():
         fg = "#333333",
         bd = 0,
         highlightthickness = 0,
-        font = font.Font(family="Montserrat Medium", size=12)
+        font = (montserratMediumFont, 12)
     )
     windowTitle.place(relx = 0.5, rely = 0.5, anchor = "center")
 
@@ -204,7 +217,7 @@ def fileWindow(window):
         anchor="center",
         text="Povleci in spusti datoteke",
         fill="#333333",
-        font=("Montserrat Medium", 16 * -1),
+        font=montserratMediumFont,
         tags="fileUploadText"
     )
     
@@ -268,7 +281,7 @@ def waitWindow(window):
         anchor="center",
         text="Nalaganje...",
         fill="#333333",
-        font=("Montserrat Medium", 16 * -1),
+        font=montserratMediumFont,
         tags="throbberText"
     )
     rotate_image()
@@ -334,8 +347,8 @@ def resultsWindow(window, fileDataframe):
     
     fileDataframe[fileDataframe.columns[0]] = fileDataframe[fileDataframe.columns[0]].apply(lambda x: x[:26] + '...' if len(x) > 26 else x)
     style = ttk.Style()
-    style.configure("style.Treeview", borderwidth=0, highlightthickness=0, font=('Montserrat', 10))
-    style.configure("style.Treeview.Heading", font=('Montserrat Semibold', 9))
+    style.configure("style.Treeview", borderwidth=0, highlightthickness=0, font=montserratMediumFont)
+    style.configure("style.Treeview.Heading", font=montserratMediumFont)
     style.layout("style.Treeview", [('style.Treeview.treearea', {'sticky': 'nswe'})])
     tree = ttk.Treeview(
         rightCanvas, 
@@ -382,7 +395,7 @@ def errorWindow(window, error):
     canvas = tk.Canvas(errorWindow, width=windowWidth, height=windowHeight, bg="#FFFFFF")
     canvas.pack()
     
-    errorMessage = tk.Label(canvas, text=error, font=("Montserrat Medium", 16), bg="#FFFFFF", fg="#333333")
+    errorMessage = tk.Label(canvas, text=error, font=montserratMediumFont, bg="#FFFFFF", fg="#333333")
     errorMessage.place(relx=0.5, rely=0.7, anchor="center")
     
     errorImage = tk.PhotoImage(file=relative_to_assets("error.png"))
@@ -422,13 +435,13 @@ def openSettingsWindow(window):
     settingsWindow.lift()
     settingsWindow.attributes('-topmost',True)
 
-    setupPlanCollumnsLabel = tk.Label(settingsWindow, text="Setup Plan Columns:", font=font.Font(family="Montserrat Medium", size=10))
+    setupPlanCollumnsLabel = tk.Label(settingsWindow, text="Setup Plan Columns:", font=montserratMediumFont)
     setupPlanCollumnsLabel.pack(side="top", fill=tk.X, padx=20, pady=10)
     setupPlanCollumnsInput = tk.Entry(settingsWindow, width=50)
     setupPlanCollumnsInput.insert(0, ','.join(setupPlanCollumns))
     setupPlanCollumnsInput.pack(side="top", fill=tk.X, padx=20)
 
-    excelFileDirectoryLabel = tk.Label(settingsWindow, text="Excel File Directory:", font=font.Font(family="Montserrat Medium", size=10))
+    excelFileDirectoryLabel = tk.Label(settingsWindow, text="Excel File Directory:", font=montserratMediumFont)
     excelFileDirectoryLabel.pack(side="top", fill=tk.X, padx=20, pady=10)
     excelFileDirectoryInput = tk.Entry(settingsWindow, width=50)
     excelFileDirectoryInput.insert(0, str(excelFileDirectory))

@@ -69,8 +69,8 @@ def filesToDataframe(setupPlanList, df):
 
 def getSinglePartMachiningTime(setupPlan):
     singlePartSQL = "ALTER TABLE LabelPartData ADD COLUMN MachiningTime VARCHAR(255);\n"
-    singlePartTable = setupPlan.find(string=re.compile("INFORMATION ON SINGLE PART")).find_parent("table")
-    machiningTimesRows = singlePartTable.find_all("font", string=re.compile("MACHINING TIME:"))
+    singlePartTable = setupPlan.find_all(string=re.compile(r"(INFORMATION ON SINGLE PART)|(EINZELTEILINFORMATION)"))[1].find_parent("table")
+    machiningTimesRows = singlePartTable.find_all(string=re.compile(r"(MACHINING TIME)|(BEARBEITUNGSZEIT)"))
     for i in range(len(machiningTimesRows)):
         machiningTime = machiningTimesRows[i].find_parent("tr").find_all("td")[1].text
         if(machiningTime != ""):
