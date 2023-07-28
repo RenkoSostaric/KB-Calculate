@@ -20,8 +20,8 @@ GWL_EXSTYLE = -20
 WS_EX_APPWINDOW = 0x00040000
 WS_EX_TOOLWINDOW = 0x00000080
 OUTPUT_PATH = Path(__file__).parent
-ASSETS_PATH = OUTPUT_PATH / Path("../assets")
-RESOURCES_PATH = OUTPUT_PATH / Path("../resources")
+ASSETS_PATH = OUTPUT_PATH / Path("assets")
+RESOURCES_PATH = OUTPUT_PATH / Path("resources")
 
 # Define the global dataFrame variable
 fileDataframe = None

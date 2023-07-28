@@ -12,6 +12,10 @@ import configparser
 import os
 warnings.filterwarnings("ignore", category=UserWarning)
 
+# Define global constants
+OUTPUT_PATH = Path(__file__).parent
+CACHE_PATH = OUTPUT_PATH / Path("cache")
+
 # Define the custom exception
 class exception(Exception):
     pass
@@ -52,7 +56,7 @@ def loadSettingsFromFile():
 # Function that goes through all the files and converts them to a dataframe
 def filesToDataframe(setupPlanList, df):
     # Connect to the temp database
-    database = sqlite3.connect('src/cache.db')
+    database = sqlite3.connect(CACHE_PATH / Path("cache.db"))
     cursor = database.cursor()
     cursor.execute("DROP TABLE IF EXISTS LabelPartData")
     # Iterate through all the files 
@@ -118,7 +122,7 @@ def getSinglePartSQL(setupPlan):
 # Function that executes the SQL script and updates the dataframe
 def dataframeAppendFile(setupPlan, df):
     # Connect to the temp database
-    database = sqlite3.connect('src/cache.db')
+    database = sqlite3.connect(CACHE_PATH / Path("cache.db"))
     cursor = database.cursor()
     cursor.execute("DROP TABLE IF EXISTS LabelPartData")    
     cursor.executescript(setupPlan)
