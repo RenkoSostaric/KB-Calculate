@@ -12,28 +12,29 @@ import threading
 import configparser
 import os
 import pyglet
+# pyglet will use the win32 gdi font renderer instead of the default freetype renderer
 pyglet.options["win32_gdi_font"] = True
 
+# Define some constants
 GWL_EXSTYLE = -20
 WS_EX_APPWINDOW = 0x00040000
 WS_EX_TOOLWINDOW = 0x00000080
 OUTPUT_PATH = Path(__file__).parent
 ASSETS_PATH = OUTPUT_PATH / Path("../assets")
 RESOURCES_PATH = OUTPUT_PATH / Path("../resources")
+
+# Define the global dataFrame variable
 fileDataframe = None
+
+# Set the DPI awareness of TKInter
 ctypes.windll.shcore.SetProcessDpiAwareness(1)
 
-pyglet.font.add_file(os.path.normpath(RESOURCES_PATH / Path("FontAwesome-Regular.otf")))
+# Import fonts from the resources folder
+pyglet.font.add_file(os.path.normpath(RESOURCES_PATH / Path("FontAwesome-Solid.ttf")))
 pyglet.font.add_file(os.path.normpath(RESOURCES_PATH / Path("Montserrat-Medium.ttf")))
 pyglet.font.add_file(os.path.normpath(RESOURCES_PATH / Path("Montserrat-Semibold.ttf")))
-fontAwesomeFont = pyglet.font.load("Font Awesome 6 Regular Free")
-montserratMediumFont = pyglet.font.load('Montserrat Medium')
-montserratSemiboldFont = pyglet.font.load("Montserrat SemiBold")
-print(pyglet.font.have_font("Montserrat Medium"))
-print(pyglet.font.have_font("Montserrat SemiBold"))
-print(pyglet.font.have_font("Font Awesome 6 Regular Free"))
 
-# Load the values of the variables from the configuration file
+# Get configuration from the config file
 config = configparser.ConfigParser()
 config.read('config\config.ini')
 setupPlanCollumns = config['DEFAULT'].get('setupPlanCollumns', 'GeoFilename,NumberOfParts,DimensionX,DimensionY,Area,Weight,MachiningTime').split(',')
@@ -43,9 +44,8 @@ excelWorkbookName = config['DEFAULT'].get('excelWorkbookName', 'podatki')
 excelLastFile = config['DEFAULT'].get('excelLastFile', 'main_output.xlsx')
 excelOutputDir = Path(config['DEFAULT'].get('excelOuputDir', 'testing/xlsx'))
 
-# Define the "Settings" menu
+# Function to save the current settings to the config file
 def saveSettingsToFile():
-    # Save the current values of the variables to the configuration file
     config['DEFAULT']['setupPlanCollumns'] = ','.join(setupPlanCollumns)
     config['DEFAULT']['excelFileDirectory'] = str(excelFileDirectory)
     config['DEFAULT']['excelSourceName'] = excelSourceName
@@ -55,6 +55,7 @@ def saveSettingsToFile():
     with open('config\config.ini', 'w') as configfile:
         config.write(configfile)
 
+# Function to load the settings from the config file
 def loadSettingsFromFile():
     config = configparser.ConfigParser()
     config.read('config\config.ini')
@@ -66,6 +67,7 @@ def loadSettingsFromFile():
     excelLastFile = config['DEFAULT'].get('excelLastFile', 'main_output.xlsx')
     excelOutputDir = Path(config['DEFAULT'].get('excelOutputDir', 'testing/xlsx'))
 
+# Function to save the settings from the GUI
 def saveSettings(setupPlanCollumnsInput, excelFileDirectoryInput, excelSourceNameInput, excelWorkbookNameInput, excelOutputDirInput):
     global setupPlanCollumns, excelFileDirectory, excelSourceName, excelWorkbookName, excelOutputDir
     setupPlanCollumns = [col.strip() for col in setupPlanCollumnsInput.get().split(',')]
@@ -75,9 +77,11 @@ def saveSettings(setupPlanCollumnsInput, excelFileDirectoryInput, excelSourceNam
     excelOutputDir = Path(excelOutputDirInput.get())
     saveSettingsToFile()
 
+# Function that returns the path to the assets folder
 def relative_to_assets(path: str) -> Path:
     return ASSETS_PATH / Path(path)
 
+# Function to set the window in the taskbar
 def setAppWindow(window):
     hwnd = ctypes.windll.user32.GetParent(window.winfo_id())
     stylew = ctypes.windll.user32.GetWindowLongW(hwnd, GWL_EXSTYLE)
@@ -87,7 +91,9 @@ def setAppWindow(window):
     window.wm_withdraw()
     window.after(10, lambda: window.wm_deiconify())
 
+# Function to create the main window
 def mainWindow():
+    # Create the main window and configure it
     window = TkinterDnD.Tk()
     window_width = 800
     window_height = 530
@@ -104,6 +110,7 @@ def mainWindow():
     window.lift()
     window.attributes('-topmost',True)
     window.after_idle(window.attributes,'-topmost',False)
+    # Add the navBar
     navBar = tk.Frame(
         window,
         bg = "#EAEAEA",
@@ -114,14 +121,14 @@ def mainWindow():
         relief = "ridge"
     )
     navBar.pack(side = "top", anchor="nw")
-    
+    # Function for the exit button
     def exitGUI():
         window.destroy()
-    
+    # Add the exit button
     exitButton = tk.Button(
         navBar,
         text = "\uf00d",
-        font = fontAwesomeFont,
+        font = ("Font Awesome 6 Free Solid", 12),
         bg = "#EAEAEA",
         fg = "#333333",
         bd = 0,
@@ -129,17 +136,17 @@ def mainWindow():
         command = exitGUI
     )
     exitButton.place(relx=0.99, rely=0.5, anchor="e")
-    
+    # Function to open the settings window
     def menuPopup(window):
         menu = tk.Menu(navBar, tearoff=0)
         menu.add_command(label="Nastavitve", command=lambda: openSettingsWindow(window))
         menu.add_command(label="Izhod", command=exitGUI)
         menu.tk_popup(navBar.winfo_rootx(), navBar.winfo_rooty()+30)
-        
+    # Add the menu button
     menuButton = tk.Button(
         navBar,
         text = "\uf0c9",
-        font = fontAwesomeFont,
+        font = ("Font Awesome 6 Free Solid", 12),
         bg = "#EAEAEA",
         fg = "#333333",
         bd = 0,
@@ -147,7 +154,7 @@ def mainWindow():
         command = lambda: menuPopup(window)
     )
     menuButton.place(relx=0.01, rely=0.5, anchor="w")
-    
+    # Add the window title
     windowTitle = tk.Label(
         navBar,
         text = "KB Calculate",
@@ -155,10 +162,10 @@ def mainWindow():
         fg = "#333333",
         bd = 0,
         highlightthickness = 0,
-        font = (montserratMediumFont, 12)
+        font = ("Montserrat Medium", 12)
     )
     windowTitle.place(relx = 0.5, rely = 0.5, anchor = "center")
-
+    # Add the left and right canvas
     global leftCanvas
     leftCanvas = tk.Canvas(
         window,
@@ -171,7 +178,6 @@ def mainWindow():
     )
     leftCanvas.place(x = 0, y = 30)
     leftCanvas.create_line(259, 0, 259, 500, fill="#D9D9D9", width=2)
-    
     global rightCanvas
     rightCanvas = tk.Canvas(
         window,
@@ -183,7 +189,7 @@ def mainWindow():
         relief = "ridge"
     )
     rightCanvas.place(x = 260, y = 30)  
-    
+    # Add the background logo
     backgroundLogo = tk.PhotoImage(
         file=relative_to_assets("background_logo.png")
     )
@@ -194,15 +200,17 @@ def mainWindow():
         anchor="center",
         tags="backgroundLogo"
     )
+    # Call the fileWindow function to draw the file window
     fileWindow(window)
     window.mainloop()
     
-    
+# Function to draw the file window
 def fileWindow(window):
+    # Add the file window drag and drop image
     fileUploadImage = tk.PhotoImage(
         file=relative_to_assets("file_upload.png")
     )
-    leftCanvas.fileUploadImage = fileUploadImage # type: ignore
+    leftCanvas.fileUploadImage = fileUploadImage # type: ignore # Prevent garbage collection
     leftCanvas.create_image(
         130.0,
         240.0,
@@ -210,41 +218,47 @@ def fileWindow(window):
         image=fileUploadImage,
         tags="fileUploadImage"
     )
-    
+    # Add the file window drag and drop text
     leftCanvas.create_text(
         130.0,
         340.0,
         anchor="center",
         text="Povleci in spusti datoteke",
         fill="#333333",
-        font=montserratMediumFont,
+        font=("Montserrat Medium", 12),
         tags="fileUploadText"
     )
-    
+    # Variable that saves the dropped files
     dropped_files = []
+    # Function to handle the drop event
     def handle_drop(event):
-        file_paths = event.data.replace('{', '').replace('}', '\n').split('\n')
+        file_paths = event.data.replace('.HTML', '.HTML;').replace('{', '').replace('}', '').split(';')
         file_paths = [path.strip() for path in file_paths if path.strip()]
         for file_path in file_paths:
-            dropped_files.append(file_path)
+            if(file_path != ''):
+                dropped_files.append(file_path)
         if len(dropped_files) > 0:
             waitWindow(window)
-            conversion_thread = threading.Thread(target=mainConversionThread, args=(window, dropped_files))
-            conversion_thread.start()
-    
+            conversionThread = threading.Thread(target=mainConversionThread, args=(window, dropped_files))
+            conversionThread.start()
+    # Bind the drop event to the left canvas
     leftCanvas.drop_target_register(DND_FILES) # type: ignore
     leftCanvas.dnd_bind('<<Drop>>', handle_drop) # type: ignore
     window.update()
-    
+
+# Function to run the waitWindow and calculation functions in a thread to prevent the GUI from freezing 
 def mainConversionThread(window, file_list):
     try:
         fileDataframe = conversion.mainConversion(file_list)
-        window.after(0, resultsWindow, window, fileDataframe)    
+        window.after(10, resultsWindow, window, fileDataframe)    
     except conversion.exception as e:
         errorWindow(window, e)
-    
+
+# Function to draw the results window
 def waitWindow(window):
+    # Reset the left canvas
     leftCanvas.delete("fileUploadImage", "fileUploadText")
+    # Add the throbber background image
     throbberBackgroundImage = tk.PhotoImage(
         file=relative_to_assets("throbber_background.png")
     )
@@ -255,7 +269,8 @@ def waitWindow(window):
         image=throbberBackgroundImage,
         tags="throbberBackgroundImage"
     )
-    leftCanvas.throbberBackgroundImage = throbberBackgroundImage #type: ignore
+    leftCanvas.throbberBackgroundImage = throbberBackgroundImage #type: ignore # Prevent garbage collection
+    # Add the throbber image
     throbberImage = tk.PhotoImage(
         file=relative_to_assets("throbber.png")
     )
@@ -266,30 +281,37 @@ def waitWindow(window):
         image=throbberImage,
         tags="throbberImage"
     )
+    # Function to rotate the throbber image
     def rotate_image():
-        for angle in range(0, 720, 10):
+        for angle in range(1440, 0, -10):
             throbberImage = ImageTk.PhotoImage(
                 Image.open(relative_to_assets("throbber.png")).rotate(angle, resample=Image.BICUBIC)
             )
             leftCanvas.itemconfig(throbberItem, image=throbberImage)
-            leftCanvas.throbberImage = throbberImage  # type: ignore
+            leftCanvas.throbberImage = throbberImage  # type: ignore # Prevent garbage collection
             window.update()
             time.sleep(0.01)
+    # Add the throbber text
     leftCanvas.create_text(
         130.0,
         340.0,
         anchor="center",
         text="Nalaganje...",
         fill="#333333",
-        font=montserratMediumFont,
+        font=("Montserrat Medium", 12),
         tags="throbberText"
     )
+    # Start the throbber rotation
     rotate_image()
+    # Unregister the drop event
     leftCanvas.drop_target_unregister()
     window.update()
-    
+
+# Function to draw the error window
 def resultsWindow(window, fileDataframe):
+    # Reset the left and right canvas
     leftCanvas.delete("throbberImage", "throbberBackgroundImage", "throbberText")
+    # Add the results window background image
     rightCanvas.delete("backgroundLogo")
     checkmarkImage = tk.PhotoImage(
         file=relative_to_assets("checkmark.png")
@@ -301,21 +323,23 @@ def resultsWindow(window, fileDataframe):
         image=checkmarkImage,
         tags="checkmarkImage"
     )
-    leftCanvas.checkmarkImage = checkmarkImage # type: ignore
+    leftCanvas.checkmarkImage = checkmarkImage # type: ignore # Prevent garbage collection
+    # Add the results window text
     leftCanvas.create_text(
         130.0,
         340.0,
         anchor="center",
         text="Nalaganje končano!",
         fill="#333333",
-        font=("Montserrat Medium", 16 * -1),
+        font=("Montserrat Medium", 12),
         tags="checkmarkText"
-    ) 
+    )
+    # Add the cancel button with image becauce TKinter doesn't support rounded buttons
     buttonCancelImage = Image.open(relative_to_assets("button_cancel.png"))
     buttonCancelImage = buttonCancelImage.resize((92, 40), resample=Image.BICUBIC)
     buttonCancelImage = ImageTk.PhotoImage(buttonCancelImage) 
-    rightCanvas.button_cancel_image = buttonCancelImage # type: ignore
-    button_cancel = tk.Button(
+    rightCanvas.button_cancel_image = buttonCancelImage # type: ignore # Prevent garbage collection
+    buttonCancel = tk.Button(
         image=buttonCancelImage,
         borderwidth=0,
         highlightthickness=0,
@@ -324,15 +348,16 @@ def resultsWindow(window, fileDataframe):
         command=lambda: resetWindow(window),
         relief="flat"
     )
-    rightCanvas.create_window(350, 460, anchor="center", window=button_cancel, width=97, height=45)
-        
+    rightCanvas.create_window(350, 460, anchor="center", window=buttonCancel, width=97, height=45)
+    # Function to open the excel file
     def openXlsxFile():
         loadSettingsFromFile()
         os.system(f'start excel "{excelOutputDir}/{excelLastFile}"')
+    # Add the xlsx button with image becauce TKinter doesn't support rounded buttons
     buttonXlsxImage = Image.open(relative_to_assets("button_xlsx.png"))
     buttonXlsxImage = buttonXlsxImage.resize((120, 40), resample=Image.BICUBIC)
     buttonXlsxImage = ImageTk.PhotoImage(buttonXlsxImage)
-    rightCanvas.button_xlsx_image = buttonXlsxImage # type: ignore
+    rightCanvas.button_xlsx_image = buttonXlsxImage # type: ignore # Prevent garbage collection
     button_xlsx = tk.Button(
         image=buttonXlsxImage,
         borderwidth=0,
@@ -343,12 +368,11 @@ def resultsWindow(window, fileDataframe):
         relief="flat"
     )
     rightCanvas.create_window(465, 460, anchor="center", window=button_xlsx, width=125, height=45)
-    
-    
+    # Add the treeview for results preview
     fileDataframe[fileDataframe.columns[0]] = fileDataframe[fileDataframe.columns[0]].apply(lambda x: x[:26] + '...' if len(x) > 26 else x)
     style = ttk.Style()
-    style.configure("style.Treeview", borderwidth=0, highlightthickness=0, font=montserratMediumFont)
-    style.configure("style.Treeview.Heading", font=montserratMediumFont)
+    style.configure("style.Treeview", borderwidth=0, highlightthickness=0, font=("Montserrat Medium", 10))
+    style.configure("style.Treeview.Heading", font=("Montserrat SemiBold", 10))
     style.layout("style.Treeview", [('style.Treeview.treearea', {'sticky': 'nswe'})])
     tree = ttk.Treeview(
         rightCanvas, 
@@ -359,28 +383,32 @@ def resultsWindow(window, fileDataframe):
         selectmode="none",
     )
     rightCanvas.create_window(0, 0, anchor="nw", window=tree, width=540, height=450)
-        
+    # Set the treeview columns
     tree.column(fileDataframe.columns[0], width=220, stretch=False) #type: ignore
     tree.column(fileDataframe.columns[2], width=100, stretch=False) #type: ignore
     tree.column(fileDataframe.columns[3], width=100, stretch=False) #type: ignore
     tree.column(fileDataframe.columns[-1], width=120, stretch=False) #type: ignore
-
+    # Insert the treeview data
     for col in tree["columns"]:
         tree.heading(col, text=col)    
     for index, row in fileDataframe.iterrows():
         tree.insert("", "end", values=(row[fileDataframe.columns[0]], row[fileDataframe.columns[2]], row[fileDataframe.columns[3]], row[fileDataframe.columns[-1]])) #type: ignore
-    
     window.update()
-    
+
+# Function to reset the window to the default state
 def resetWindow(window):
+    # Reset the left and right canvas
     leftCanvas.delete("checkmarkImage", "checkmarkText", "throbberText", "throbberImage", "throbberBackgroundImage")
     rightCanvas.delete("all")
+    # Call the fileWindow function
     fileWindow(window)
-    
+
+# Function to draw the error window
 def errorWindow(window, error):
+    # Create and configure the error window
     errorWindow = tk.Toplevel(window)
-    windowWidth = 600
-    windowHeight = 400
+    windowWidth = 500
+    windowHeight = 350
     screenWidth = errorWindow.winfo_screenwidth()
     screenHeight = errorWindow.winfo_screenheight()
     x = (screenWidth // 2) - (windowWidth // 2)
@@ -394,18 +422,17 @@ def errorWindow(window, error):
     errorWindow.attributes('-topmost',True)
     canvas = tk.Canvas(errorWindow, width=windowWidth, height=windowHeight, bg="#FFFFFF")
     canvas.pack()
-    
-    errorMessage = tk.Label(canvas, text=error, font=montserratMediumFont, bg="#FFFFFF", fg="#333333")
+    # Add the error window text and image
+    errorMessage = tk.Label(canvas, text=error, font=("Montserrat Medium", 12), bg="#FFFFFF", fg="#333333")
     errorMessage.place(relx=0.5, rely=0.7, anchor="center")
-    
     errorImage = tk.PhotoImage(file=relative_to_assets("error.png"))
     canvas.create_image(windowWidth // 2, windowHeight // 2 - 50, image=errorImage)
     canvas.errorImage = errorImage # type: ignore
-
+    # Add the error window button with image becauce TKinter doesn't support rounded buttons
     buttonCancelImage = Image.open(relative_to_assets("button_again.png"))
     buttonCancelImage = buttonCancelImage.resize((160, 40), resample=Image.BICUBIC)
-    buttonCancelImage = ImageTk.PhotoImage(buttonCancelImage) 
-    canvas.buttonCancelImage = buttonCancelImage # type: ignore
+    buttonCancelImage = ImageTk.PhotoImage(buttonCancelImage)
+    canvas.buttonCancelImage = buttonCancelImage # type: ignore # Prevent garbage collection
     buttonCancel = tk.Button(
         canvas,
         image=buttonCancelImage,
@@ -416,10 +443,12 @@ def errorWindow(window, error):
         command=lambda: [resetWindow(window), errorWindow.destroy()],
         relief="flat"
     )
-    buttonCancel.place(relx=0.5, rely=0.9, anchor="center")
+    buttonCancel.place(relx=0.5, rely=0.87, anchor="center")
     window.update()
 
+# Function to draw the settings window
 def openSettingsWindow(window):
+    # Create and configure the settings window
     settingsWindow = tk.Toplevel(window)
     windowWidth = 400
     windowHeight = 360
@@ -434,41 +463,42 @@ def openSettingsWindow(window):
     settingsWindow.iconbitmap("assets/icon.ico")
     settingsWindow.lift()
     settingsWindow.attributes('-topmost',True)
-
-    setupPlanCollumnsLabel = tk.Label(settingsWindow, text="Setup Plan Columns:", font=montserratMediumFont)
+    # Add the settings labels and inputs for setupPlanCollumns
+    setupPlanCollumnsLabel = tk.Label(settingsWindow, text="Setup Plan Columns:", font=("Montserrat Medium", 10))
     setupPlanCollumnsLabel.pack(side="top", fill=tk.X, padx=20, pady=10)
     setupPlanCollumnsInput = tk.Entry(settingsWindow, width=50)
     setupPlanCollumnsInput.insert(0, ','.join(setupPlanCollumns))
     setupPlanCollumnsInput.pack(side="top", fill=tk.X, padx=20)
-
-    excelFileDirectoryLabel = tk.Label(settingsWindow, text="Excel File Directory:", font=montserratMediumFont)
+    # Add the settings labels and inputs for excelFileDirectory
+    excelFileDirectoryLabel = tk.Label(settingsWindow, text="Excel File Directory:", font=("Montserrat Medium", 10))
     excelFileDirectoryLabel.pack(side="top", fill=tk.X, padx=20, pady=10)
     excelFileDirectoryInput = tk.Entry(settingsWindow, width=50)
     excelFileDirectoryInput.insert(0, str(excelFileDirectory))
     excelFileDirectoryInput.pack(side="top", fill=tk.X, padx=20)
-
-    excelSourceNameLabel = tk.Label(settingsWindow, text="Excel Source Name:", font=font.Font(family="Montserrat Medium", size=10))
+    # Add the settings labels and inputs for excelSourceName
+    excelSourceNameLabel = tk.Label(settingsWindow, text="Excel Source Name:", font=("Montserrat Medium", 10))
     excelSourceNameLabel.pack(side="top", fill=tk.X, padx=20, pady=10)
     excelSourceNameInput = tk.Entry(settingsWindow, width=50)
     excelSourceNameInput.insert(0, excelSourceName)
     excelSourceNameInput.pack(side="top", fill=tk.X, padx=20)
-
-    excelWorkbookNameLabel = tk.Label(settingsWindow, text="Excel Workbook Name:", font=font.Font(family="Montserrat Medium", size=10))
+    # Add the settings labels and inputs for excelWorkbookName
+    excelWorkbookNameLabel = tk.Label(settingsWindow, text="Excel Workbook Name:", font=("Montserrat Medium", 10))
     excelWorkbookNameLabel.pack(side="top", fill=tk.X, padx=20, pady=10)
     excelWorkbookNameInput = tk.Entry(settingsWindow, width=50)
     excelWorkbookNameInput.insert(0, excelWorkbookName)
     excelWorkbookNameInput.pack(side="top", fill=tk.X, padx=20)
-    
-    excelOuputDirLabel = tk.Label(settingsWindow, text="Excel Ouput Directory:", font=font.Font(family="Montserrat Medium", size=10))
+    # Add the settings labels and inputs for excelOuputDir
+    excelOuputDirLabel = tk.Label(settingsWindow, text="Excel Ouput Directory:", font=("Montserrat Medium", 10))
     excelOuputDirLabel.pack(side="top", fill=tk.X, padx=20, pady=10)
     excelOuputDirInput = tk.Entry(settingsWindow, width=50)
     excelOuputDirInput.insert(0, excelOutputDir)
     excelOuputDirInput.pack(side="top", fill=tk.X, padx=20)
-
+    # Add the settings window buttons for close and save
     close_button = tk.Button(settingsWindow, text="Zapri", command=lambda:settingsWindow.destroy())
     close_button.place(relx=0.78, rely=0.94, anchor="center")
     save_button = tk.Button(settingsWindow, text="Shrani", command=lambda:saveSettings(setupPlanCollumnsInput, excelFileDirectoryInput, excelSourceNameInput, excelWorkbookNameInput, excelOuputDirInput))
     save_button.place(relx=0.9, rely=0.94, anchor="center")
 
+# Main function to draw the main window
 if __name__ == "__main__":
     mainWindow()
