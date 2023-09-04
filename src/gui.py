@@ -22,6 +22,7 @@ WS_EX_TOOLWINDOW = 0x00000080
 OUTPUT_PATH = Path(__file__).parent
 ASSETS_PATH = OUTPUT_PATH / Path("assets")
 RESOURCES_PATH = OUTPUT_PATH / Path("resources")
+CONFIG_PATH = OUTPUT_PATH / Path("config")
 
 # Define the global dataFrame variable
 fileDataframe = None
@@ -36,13 +37,13 @@ pyglet.font.add_file(os.path.normpath(RESOURCES_PATH / Path("Montserrat-Semibold
 
 # Get configuration from the config file
 config = configparser.ConfigParser()
-config.read('config\config.ini')
+config.read(CONFIG_PATH / Path("config.ini"))
 setupPlanCollumns = config['DEFAULT'].get('setupPlanCollumns', 'GeoFilename,NumberOfParts,DimensionX,DimensionY,Area,Weight,MachiningTime').split(',')
 excelFileDirectory = Path(config['DEFAULT'].get('excelFileDirectory', 'testing/xlsx'))
 excelSourceName = config['DEFAULT'].get('excelSourceName', 'main.xlsx')
 excelWorkbookName = config['DEFAULT'].get('excelWorkbookName', 'podatki')
 excelLastFile = config['DEFAULT'].get('excelLastFile', 'main_output.xlsx')
-excelOutputDir = Path(config['DEFAULT'].get('excelOuputDir', 'testing/xlsx'))
+excelOutputDir = Path(config['DEFAULT'].get('excelOutputDir', 'testing/xlsx'))
 
 # Function to save the current settings to the config file
 def saveSettingsToFile():
@@ -52,13 +53,14 @@ def saveSettingsToFile():
     config['DEFAULT']['excelWorkbookName'] = excelWorkbookName
     config['DEFAULT']['excelLastFile'] = excelLastFile
     config['DEFAULT']['excelOutputDir'] = str(excelOutputDir)
-    with open('config\config.ini', 'w') as configfile:
+    with open(CONFIG_PATH / Path("config.ini"), 'w') as configfile:
+        print("Saving settings")
         config.write(configfile)
 
 # Function to load the settings from the config file
 def loadSettingsFromFile():
     config = configparser.ConfigParser()
-    config.read('config\config.ini')
+    config.read(CONFIG_PATH / Path("config.ini"))
     global setupPlanCollumns, excelFileDirectory, excelSourceName, excelWorkbookName, excelLastFile, excelOutputDir
     setupPlanCollumns = config['DEFAULT'].get('setupPlanCollumns', 'GeoFilename,NumberOfParts,DimensionX,DimensionY,Area,Weight,MachiningTime').split(',')
     excelFileDirectory = Path(config['DEFAULT'].get('excelFileDirectory', 'testing/xlsx'))
@@ -106,10 +108,9 @@ def mainWindow():
     window.overrideredirect(True)
     window.resizable(False, False)
     window.after(10, lambda: setAppWindow(window))
-    window.iconbitmap("assets/icon.ico")
+    window.iconbitmap(relative_to_assets("ikona.ico"))
     window.lift()
     window.attributes('-topmost',True)
-    window.after_idle(window.attributes,'-topmost',False)
     # Add the navBar
     navBar = tk.Frame(
         window,
@@ -121,6 +122,9 @@ def mainWindow():
         relief = "ridge"
     )
     navBar.pack(side = "top", anchor="nw")
+    def moveApp(e):
+        window.geometry(f'+{e.x_root}+{e.y_root}')
+    navBar.bind('<B1-Motion>', moveApp)
     # Function for the exit button
     def exitGUI():
         window.destroy()
@@ -417,7 +421,7 @@ def errorWindow(window, error):
     errorWindow.geometry(f"{windowWidth}x{windowHeight}+{x}+{y}")
     errorWindow.overrideredirect(True)
     errorWindow.resizable(False, False)
-    errorWindow.iconbitmap("assets/icon.ico")
+    errorWindow.iconbitmap(relative_to_assets("ikona.ico"))
     errorWindow.lift()
     errorWindow.attributes('-topmost',True)
     canvas = tk.Canvas(errorWindow, width=windowWidth, height=windowHeight, bg="#FFFFFF")
@@ -460,7 +464,7 @@ def openSettingsWindow(window):
     settingsWindow.geometry(f"{windowWidth}x{windowHeight}+{x}+{y}")
     settingsWindow.overrideredirect(True)
     settingsWindow.resizable(False, False)
-    settingsWindow.iconbitmap("assets/icon.ico")
+    settingsWindow.iconbitmap(relative_to_assets("ikona.ico"))
     settingsWindow.lift()
     settingsWindow.attributes('-topmost',True)
     # Add the settings labels and inputs for setupPlanCollumns

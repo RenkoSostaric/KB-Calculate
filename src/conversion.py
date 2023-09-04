@@ -15,6 +15,7 @@ warnings.filterwarnings("ignore", category=UserWarning)
 # Define global constants
 OUTPUT_PATH = Path(__file__).parent
 CACHE_PATH = OUTPUT_PATH / Path("cache")
+CONFIG_PATH = OUTPUT_PATH / Path("config")
 
 # Define the custom exception
 class exception(Exception):
@@ -22,7 +23,7 @@ class exception(Exception):
 
 # Get configuration from the config file
 config = configparser.ConfigParser()
-config.read('config\config.ini')
+config.read(CONFIG_PATH / Path("config.ini"))
 setupPlanCollumns = config['DEFAULT'].get('setupPlanCollumns', 'GeoFilename,NumberOfParts,DimensionX,DimensionY,Area,Weight,MachiningTime').split(',')
 excelFileDirectory = Path(config['DEFAULT'].get('excelFileDirectory', 'testing/xlsx'))
 excelSourceName = config['DEFAULT'].get('excelSourceName', 'main.xlsx')
@@ -38,13 +39,13 @@ def saveSettingsToFile():
     config['DEFAULT']['excelWorkbookName'] = excelWorkbookName
     config['DEFAULT']['excelLastFile'] = excelLastFile
     config['DEFAULT']['excelOutputDir'] = str(excelOutputDir)
-    with open('config\config.ini', 'w') as configfile:
+    with open(CONFIG_PATH / Path("config.ini"), 'w') as configfile:
         config.write(configfile)
 
 # Function to load the settings from the config file
 def loadSettingsFromFile():
     config = configparser.ConfigParser()
-    config.read('config\config.ini')
+    config.read(CONFIG_PATH / Path("config.ini"))
     global setupPlanCollumns, excelFileDirectory, excelSourceName, excelWorkbookName, excelLastFile, excelOutputDir
     setupPlanCollumns = config['DEFAULT'].get('setupPlanCollumns', 'GeoFilename,NumberOfParts,DimensionX,DimensionY,Area,Weight,MachiningTime').split(',')
     excelFileDirectory = Path(config['DEFAULT'].get('excelFileDirectory', 'testing/xlsx'))
@@ -89,7 +90,7 @@ def getSinglePartMachiningTime(setupPlan):
     # Create the new column in SQL
     singlePartSQL = "ALTER TABLE LabelPartData ADD COLUMN MachiningTime VARCHAR(255);\n"
     # Find the table with the single part data
-    singlePartTable = setupPlan.find_all(string=re.compile(r"(INFORMATION ON SINGLE PART)|(EINZELTEILINFORMATION)"))[1].find_parent("table")
+    singlePartTable = setupPlan.find_all(string=re.compile(r"(INFORMATION ON SINGLE PART)|(EINZELTEILINFORMATION)"))[-1].find_parent("table")
     # Find all the rows that contain the machining times
     machiningTimesRows = singlePartTable.find_all(string=re.compile(r"(MACHINING TIME)|(BEARBEITUNGSZEIT)"))
     # Iterate through all the rows and add the machining time to the SQL script
