@@ -64,11 +64,11 @@ def filesToDataframe(setupPlanList, df):
     for file in setupPlanList:
         file = Path(file)
         # Check if the file is an HTML file
-        if not (file.suffix == ".html" or file.suffix == ".HTML"):
-            raise exception("Datoteka ni HTML")
         # Check if the file exists
         if not file.is_file():
             raise exception("Datoteka ne obstaja")
+        if not (file.suffix == ".html" or file.suffix == ".HTML"):
+            raise exception("Datoteka ni HTML")
         # Open the file and parse it to a BeautifulSoup object
         with open(file) as fp:
             setupPlan = BeautifulSoup(fp, "html.parser")
@@ -160,11 +160,15 @@ def writeToXlsx(df, excelOutputName):
 
 # Function that controls the conversion process and returns the dataframe for the GUI preview
 def mainConversion(setupPlanList):
+    # Load confinguration from the config file
     loadSettingsFromFile()
+    # Create and fill the dataframe
     df = pd.DataFrame(columns=setupPlanCollumns)
     df = filesToDataframe(setupPlanList, df)
+    # Create the excel file
     global excelLastFile
     excelLastFile = os.path.basename(setupPlanList[0].replace(".HTML", ".xlsx"))
     writeToXlsx(df, excelLastFile)
+    # Save the settings with created excel file name to the config file
     saveSettingsToFile()
     return df
