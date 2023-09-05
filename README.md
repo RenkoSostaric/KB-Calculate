@@ -22,7 +22,7 @@ Set the main file directory, main file name, main sheet name and the directory f
 
 ![1693832451019](image/README/1693832451019.png)
 
-Drag the setup plans in .HTML format onto the the file drop area
+Drag and drop the setup plans in .HTML format onto the file drop area
 
 ![1693832542575](image/README/1693832542575.png)
 
