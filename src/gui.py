@@ -20,7 +20,7 @@ pyglet.options["win32_gdi_font"] = True
 ctypes.windll.shcore.SetProcessDpiAwareness(1)
 
 if getattr(sys, 'frozen', False):
-    import pyi_splash
+    import pyi_splash # type: ignore # Import the splash screen if the app is compiled
 
 
 # Define some constants
