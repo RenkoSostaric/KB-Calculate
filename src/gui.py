@@ -80,7 +80,7 @@ def saveSettings(setupPlanCollumnsInput, excelFileDirectoryInput, excelSourceNam
     saveSettingsToFile()
 
 # Function that returns the path to the assets folder
-def relative_to_assets(path: str) -> Path:
+def relativeToAssets(path: str) -> Path:
     return ASSETS_PATH / Path(path)
 
 # Function to set the window in the taskbar
@@ -108,7 +108,7 @@ def mainWindow():
     window.overrideredirect(True)
     window.resizable(False, False)
     window.after(10, lambda: setAppWindow(window))
-    window.iconbitmap(relative_to_assets("ikona.ico"))
+    window.iconbitmap(relativeToAssets("ikona.ico"))
     window.lift()
     window.attributes('-topmost',True)
     # Add the navBar
@@ -195,7 +195,7 @@ def mainWindow():
     rightCanvas.place(x = 260, y = 30)  
     # Add the background logo
     backgroundLogo = tk.PhotoImage(
-        file=relative_to_assets("background_logo.png")
+        file=relativeToAssets("background_logo.png")
     )
     rightCanvas.create_image(
         270, 
@@ -212,7 +212,7 @@ def mainWindow():
 def fileWindow(window):
     # Add the file window drag and drop image
     fileUploadImage = tk.PhotoImage(
-        file=relative_to_assets("file_upload.png")
+        file=relativeToAssets("file_upload.png")
     )
     leftCanvas.fileUploadImage = fileUploadImage # type: ignore # Prevent garbage collection
     leftCanvas.create_image(
@@ -264,7 +264,7 @@ def waitWindow(window):
     leftCanvas.delete("fileUploadImage", "fileUploadText")
     # Add the throbber background image
     throbberBackgroundImage = tk.PhotoImage(
-        file=relative_to_assets("throbber_background.png")
+        file=relativeToAssets("throbber_background.png")
     )
     leftCanvas.create_image(
         130.0,
@@ -276,7 +276,7 @@ def waitWindow(window):
     leftCanvas.throbberBackgroundImage = throbberBackgroundImage #type: ignore # Prevent garbage collection
     # Add the throbber image
     throbberImage = tk.PhotoImage(
-        file=relative_to_assets("throbber.png")
+        file=relativeToAssets("throbber.png")
     )
     throbberItem=leftCanvas.create_image(
         130.0,
@@ -289,7 +289,7 @@ def waitWindow(window):
     def rotate_image():
         for angle in range(1440, 0, -10):
             throbberImage = ImageTk.PhotoImage(
-                Image.open(relative_to_assets("throbber.png")).rotate(angle, resample=Image.BICUBIC)
+                Image.open(relativeToAssets("throbber.png")).rotate(angle, resample=Image.BICUBIC)
             )
             leftCanvas.itemconfig(throbberItem, image=throbberImage)
             leftCanvas.throbberImage = throbberImage  # type: ignore # Prevent garbage collection
@@ -318,7 +318,7 @@ def resultsWindow(window, fileDataframe):
     # Add the results window background image
     rightCanvas.delete("backgroundLogo")
     checkmarkImage = tk.PhotoImage(
-        file=relative_to_assets("checkmark.png")
+        file=relativeToAssets("checkmark.png")
     )
     leftCanvas.create_image(
         130.0,
@@ -339,7 +339,7 @@ def resultsWindow(window, fileDataframe):
         tags="checkmarkText"
     )
     # Add the cancel button with image becauce TKinter doesn't support rounded buttons
-    buttonCancelImage = Image.open(relative_to_assets("button_cancel.png"))
+    buttonCancelImage = Image.open(relativeToAssets("button_cancel.png"))
     buttonCancelImage = buttonCancelImage.resize((92, 40), resample=Image.BICUBIC)
     buttonCancelImage = ImageTk.PhotoImage(buttonCancelImage) 
     rightCanvas.button_cancel_image = buttonCancelImage # type: ignore # Prevent garbage collection
@@ -358,7 +358,7 @@ def resultsWindow(window, fileDataframe):
         loadSettingsFromFile()
         os.system(f'start excel "{excelOutputDir}/{excelLastFile}"')
     # Add the xlsx button with image becauce TKinter doesn't support rounded buttons
-    buttonXlsxImage = Image.open(relative_to_assets("button_xlsx.png"))
+    buttonXlsxImage = Image.open(relativeToAssets("button_xlsx.png"))
     buttonXlsxImage = buttonXlsxImage.resize((120, 40), resample=Image.BICUBIC)
     buttonXlsxImage = ImageTk.PhotoImage(buttonXlsxImage)
     rightCanvas.button_xlsx_image = buttonXlsxImage # type: ignore # Prevent garbage collection
@@ -421,7 +421,7 @@ def errorWindow(window, error):
     errorWindow.geometry(f"{windowWidth}x{windowHeight}+{x}+{y}")
     errorWindow.overrideredirect(True)
     errorWindow.resizable(False, False)
-    errorWindow.iconbitmap(relative_to_assets("ikona.ico"))
+    errorWindow.iconbitmap(relativeToAssets("ikona.ico"))
     errorWindow.lift()
     errorWindow.attributes('-topmost',True)
     canvas = tk.Canvas(errorWindow, width=windowWidth, height=windowHeight, bg="#FFFFFF")
@@ -429,11 +429,11 @@ def errorWindow(window, error):
     # Add the error window text and image
     errorMessage = tk.Label(canvas, text=error, font=("Montserrat Medium", 12), bg="#FFFFFF", fg="#333333")
     errorMessage.place(relx=0.5, rely=0.7, anchor="center")
-    errorImage = tk.PhotoImage(file=relative_to_assets("error.png"))
+    errorImage = tk.PhotoImage(file=relativeToAssets("error.png"))
     canvas.create_image(windowWidth // 2, windowHeight // 2 - 50, image=errorImage)
     canvas.errorImage = errorImage # type: ignore
     # Add the error window button with image becauce TKinter doesn't support rounded buttons
-    buttonCancelImage = Image.open(relative_to_assets("button_again.png"))
+    buttonCancelImage = Image.open(relativeToAssets("button_again.png"))
     buttonCancelImage = buttonCancelImage.resize((160, 40), resample=Image.BICUBIC)
     buttonCancelImage = ImageTk.PhotoImage(buttonCancelImage)
     canvas.buttonCancelImage = buttonCancelImage # type: ignore # Prevent garbage collection
@@ -464,7 +464,7 @@ def openSettingsWindow(window):
     settingsWindow.geometry(f"{windowWidth}x{windowHeight}+{x}+{y}")
     settingsWindow.overrideredirect(True)
     settingsWindow.resizable(False, False)
-    settingsWindow.iconbitmap(relative_to_assets("ikona.ico"))
+    settingsWindow.iconbitmap(relativeToAssets("ikona.ico"))
     settingsWindow.lift()
     settingsWindow.attributes('-topmost',True)
     # Add the settings labels and inputs for setupPlanCollumns
