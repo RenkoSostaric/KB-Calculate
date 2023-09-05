@@ -12,8 +12,16 @@ import threading
 import configparser
 import os
 import pyglet
+import sys
 # pyglet will use the win32 gdi font renderer instead of the default freetype renderer
 pyglet.options["win32_gdi_font"] = True
+
+# Set the DPI awareness of TKInter
+ctypes.windll.shcore.SetProcessDpiAwareness(1)
+
+if getattr(sys, 'frozen', False):
+    import pyi_splash
+
 
 # Define some constants
 GWL_EXSTYLE = -20
@@ -26,9 +34,6 @@ CONFIG_PATH = OUTPUT_PATH / Path("config")
 
 # Define the global dataFrame variable
 fileDataframe = None
-
-# Set the DPI awareness of TKInter
-ctypes.windll.shcore.SetProcessDpiAwareness(1)
 
 # Import fonts from the resources folder
 pyglet.font.add_file(os.path.normpath(RESOURCES_PATH / Path("FontAwesome-Solid.ttf")))
@@ -206,8 +211,11 @@ def mainWindow():
     )
     # Call the fileWindow function to draw the file window
     fileWindow(window)
+    # Close the splash screen
+    if getattr(sys, 'frozen', False):
+        pyi_splash.close()
     window.mainloop()
-    
+
 # Function to draw the file window
 def fileWindow(window):
     # Add the file window drag and drop image
@@ -287,7 +295,7 @@ def waitWindow(window):
     )
     # Function to rotate the throbber image
     def rotate_image():
-        for angle in range(1440, 0, -10):
+        for angle in range(2880, 0, -10):
             throbberImage = ImageTk.PhotoImage(
                 Image.open(relativeToAssets("throbber.png")).rotate(angle, resample=Image.BICUBIC)
             )
