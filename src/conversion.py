@@ -98,7 +98,7 @@ def getSinglePartMachiningTime(setupPlan):
         machiningTime = machiningTimesRows[i].find_parent("tr").find_all("td")[1].text
         # Check if the machining time is not empty and add the data to the SQL script
         if(machiningTime != ""):
-            singlePartSQL += "UPDATE LabelPartData SET MachiningTime='" + re.findall(r"\d+\.\d+ min", machiningTime)[0] + "' WHERE COUNT = " + str(i+1) + ";"
+            singlePartSQL += "UPDATE LabelPartData SET MachiningTime='" + re.sub(r" min", "", re.findall(r"\d+\.\d+ min", machiningTime)[0]) + "' WHERE COUNT = " + str(i+1) + ";"
     return singlePartSQL
     
 # Function that goes through the html file and gets the SQL scipt for the single part data
@@ -150,8 +150,11 @@ def writeToXlsx(df, excelOutputName):
         workbook = pyxl.load_workbook(excelFileDirectory / excelSourceName)
         worksheet = workbook[excelWorkbookName]
         # Iterate through all the rows in the dataframe and add them to the excel file
+        rowIndex = 0;
         for row in dataframe_to_rows(df, header=True, index=False):
-            worksheet.append(row)
+            rowIndex += 1
+            for i, cell_value in enumerate(row):
+                worksheet.cell(row=rowIndex, column=i+1, value=cell_value)
         # Save the excel file as a new file
         workbook.save(excelOutputDir / excelOutputName)
         workbook.close()
