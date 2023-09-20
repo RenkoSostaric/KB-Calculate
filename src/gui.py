@@ -50,6 +50,9 @@ excelWorkbookName = config['DEFAULT'].get('excelWorkbookName', 'podatki')
 excelLastFile = config['DEFAULT'].get('excelLastFile', 'main_output.xlsx')
 excelOutputDir = Path(config['DEFAULT'].get('excelOutputDir', 'testing/xlsx'))
 
+# Boolean to see if conversion is finished
+working = True
+
 # Function to save the current settings to the config file
 def saveSettingsToFile():
     config['DEFAULT']['setupPlanCollumns'] = ','.join(setupPlanCollumns)
@@ -250,9 +253,9 @@ def fileWindow(window):
             if(file_path != ''):
                 dropped_files.append(file_path)
         if len(dropped_files) > 0:
-            waitWindow(window)
             conversionThread = threading.Thread(target=mainConversionThread, args=(window, dropped_files))
             conversionThread.start()
+            waitWindow(window)
     # Bind the drop event to the left canvas
     leftCanvas.drop_target_register(DND_FILES) # type: ignore
     leftCanvas.dnd_bind('<<Drop>>', handle_drop) # type: ignore
@@ -260,9 +263,11 @@ def fileWindow(window):
 
 # Function to run the waitWindow and calculation functions in a thread to prevent the GUI from freezing 
 def mainConversionThread(window, file_list):
+    global working
     try:
         fileDataframe = conversion.mainConversion(file_list)
-        window.after(10, resultsWindow, window, fileDataframe)    
+        working = False
+        window.after(1, resultsWindow, window, fileDataframe)    
     except conversion.exception as e:
         errorWindow(window, e)
 
@@ -295,7 +300,11 @@ def waitWindow(window):
     )
     # Function to rotate the throbber image
     def rotate_image():
-        for angle in range(2880, 0, -10):
+        global working
+        for angle in range(28800, 0, -10):
+            if working == False:
+                working = True
+                break
             throbberImage = ImageTk.PhotoImage(
                 Image.open(relativeToAssets("throbber.png")).rotate(angle, resample=Image.BICUBIC)
             )
