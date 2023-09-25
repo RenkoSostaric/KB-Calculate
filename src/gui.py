@@ -91,7 +91,7 @@ def saveSettings(setupPlanCollumnsInput, excelFileDirectoryInput, excelSourceNam
 def relativeToAssets(path: str) -> Path:
     return ASSETS_PATH / Path(path)
 
-# Function to set the window in the taskbar
+# Function to set the window and the taskbar
 def setAppWindow(window):
     hwnd = ctypes.windll.user32.GetParent(window.winfo_id())
     stylew = ctypes.windll.user32.GetWindowLongW(hwnd, GWL_EXSTYLE)

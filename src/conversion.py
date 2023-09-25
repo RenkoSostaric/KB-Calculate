@@ -125,6 +125,7 @@ def dataframeAppendFile(setupPlan, df):
     # Connect to the temp database
     database = sqlite3.connect(CACHE_PATH / Path("cache.db"))
     cursor = database.cursor()
+    # Execute the SQL script
     cursor.execute("DROP TABLE IF EXISTS LabelPartData")    
     cursor.executescript(setupPlan)
     database.commit()
@@ -134,7 +135,7 @@ def dataframeAppendFile(setupPlan, df):
         '''+ ", ".join(setupPlanCollumns) + '''
         FROM LabelPartData
     ''', database)
-    # Add the data to the dataframe if it's empty create a new one otherwise append it
+    # Add the data to the dataframe(if it's empty create a new one otherwise append it)
     if df.empty:
         df = pd.DataFrame(sql_query)
     else:
@@ -149,7 +150,7 @@ def writeToXlsx(df, excelOutputName):
         # Open the main excel file
         workbook = pyxl.load_workbook(excelFileDirectory / excelSourceName)
         worksheet = workbook[excelWorkbookName]
-        # Iterate through all the rows in the dataframe and add them to the excel file
+        # Iterate through all the cells in the dataframe and add them to the excel file
         rowIndex = 0;
         for row in dataframe_to_rows(df, header=True, index=False):
             rowIndex += 1
