@@ -6,6 +6,8 @@ This is usefeul when calculating prices for each order but you have to manually 
 
 The KB Calculate program can handle the task of extracting data from the setup plans and arranging it into a Microsoft Excel file.
 
+# NOTICE: I will be rewriting this from scratch!
+
 ## Features
 
 * Extract data from multiple setup plan files
