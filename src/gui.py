@@ -3,7 +3,6 @@ import tkinter.font as font
 from tkinterdnd2 import DND_FILES, TkinterDnD
 from  tkinter import ttk
 from pathlib import Path
-from PIL import Image, ImageTk
 from PIL import Image, ImageTk, ImageFilter
 import ctypes
 import conversion
@@ -28,6 +27,7 @@ GWL_EXSTYLE = -20
 WS_EX_APPWINDOW = 0x00040000
 WS_EX_TOOLWINDOW = 0x00000080
 OUTPUT_PATH = Path(__file__).parent
+# OUTPUT_PATH = Path(__file__).parent.parent # Use this line if you are running it from the source file
 ASSETS_PATH = OUTPUT_PATH / Path("assets")
 RESOURCES_PATH = OUTPUT_PATH / Path("resources")
 CONFIG_PATH = OUTPUT_PATH / Path("config")
